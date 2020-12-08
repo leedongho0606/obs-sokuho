@@ -4,5 +4,9 @@
   "description": "",
   "main": "index.js",
   "author": "LDH0606",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "jimp": "^0.16.1",
+    "moment": "^2.29.1"
+  }
 }
