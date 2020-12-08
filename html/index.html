@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <style>
+        body {
+            display: none;
+            font-family: "nanum";
+        }
+    </style>
+    <title>OBS-SOKUHO</title>
+</head>
+
+<body>
+    <div class="base">
+        <div class="container">
+            <div class="map">
+                <img id="map-img"></img>
+            </div>
+            <div class="title">긴급지진속보 (기상청)</div>
+            <div id="info-box">
+                <!-- 경북 경주시에서 지진발생 -->
+                <div class="info"></div>
+                <!-- 서울 부산 대구 인천 광주 대전 울산 세종 경기 강원 충북 충남 전북 전남 경북 경남 제주 -->
+                <div class="areas"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    const audio = new Audio("../res/eew.mp3"),
+        body = document.querySelector("body"),
+        areas_text = document.querySelector(".areas"),
+        info_text = document.querySelector(".info"),
+        map = document.querySelector("#map-img"),
+        title = document.querySelector(".title"),
+        webSocket = new WebSocket("ws://127.0.0.1:5950");
+    webSocket.onopen = message => {
+        console.log("Server connection: connect");
+        webSocket.send(JSON.stringify({ type: "get" }));
+    };
+    webSocket.onclose = message => {
+        console.log("Server connection: disconnect");
+        location.reload();
+    };
+    webSocket.onerror = message => {
+        console.log("Server connection: error");
+        location.reload();
+    };
+    webSocket.onmessage = msg => {
+        msg = JSON.parse(msg.data);
+        console.log(msg);
+        body.style = "display:" + msg.show;
+        map.src = msg.img;
+        areas_text.textContent = msg.areas;
+        info_text.textContent = msg.info;
+        title.textContent = msg.title;
+        switch (msg.sound) {
+            case "play":
+                console.log("play");
+                if (audio.currentTime === 0) audio.play();
+                break;
+            case "pause":
+                console.log("pause");
+                audio.pause();
+                audio.currentTime = 0;
+                break;
+            default:
+                console.log("uk");
+                audio.pause();
+                audio.currentTime = 0;
+                break;
+        }
+    };
+</script>

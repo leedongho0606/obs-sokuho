@@ -1,0 +1,71 @@
+@font-face {
+    src: url("../res/NanumSquareEB.ttf");
+    font-family: "nanum";
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.base {
+    border-radius: 8px;
+    background-color: #FFFDFF;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 255) inset, 1px 1px 1px rgba(0, 0, 0, 255);
+}
+
+.container {
+    padding: 7px;
+    display: grid;
+    grid-template:
+    "map line title" 50px
+    "map line info-box"auto 
+    "map line info-box"auto / 
+    25% 0.7% 74.3%;
+}
+
+.map {
+    grid-area: map;
+    /* 545992 */
+    background-color: #233062;
+}
+
+.map img {
+    max-width: 100%;
+    height: auto;
+    background-repeat: no-repeat;
+}
+
+#info-box {
+    grid-area: info-box;
+    background-color: #316DC1;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5) inset, 0px 0px 5px rgba(200, 200, 200, 0.5);
+}
+
+.title {
+    line-height: 50px; /*고정값.*/
+    text-justify: auto;
+    grid-area: title;
+    background: linear-gradient(to top, #AF5168 10px, #F36381);
+    text-align: center;
+    color: white;
+    -webkit-text-stroke: 1px #524942;
+    font-size: 40px;
+}
+
+.info {
+    grid-area: info;
+    padding: 5px;
+    color: yellow;
+    text-shadow: 0 0 3px #524942;
+    font-size: 33px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.areas {
+    grid-area: areas;
+    padding: 5px;
+    color: white;
+    text-shadow: 0 0 3px #524942;
+    font-size: 45px;
+    background-color: rgba(0, 0, 0, 0);
+}
