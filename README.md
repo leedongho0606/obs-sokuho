@@ -4,4 +4,4 @@
 ![Demo](./res/demo.png)<br>
 
 미리보기
-https://www.youtube.com/watch?v=of9rqQI_sQY
+https://www.youtube.com/watch?v=E9K-f5fojYc
