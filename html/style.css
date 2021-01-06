@@ -7,20 +7,41 @@
     display: none;
 }
 
+body {
+    font-family: "nanum";
+}
+
 .base {
+    position: absolute;
+    width: 62.85vw;
+    left: 17.8vw;
+    top: 51vh;
     border-radius: 8px;
     background-color: #FFFDFF;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 255) inset, 1px 1px 1px rgba(0, 0, 0, 255);
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 255) inset, 2px 2px 2px rgba(0, 0, 0, 255);
+}
+
+.topbar {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    margin:0 0 0 -10vw;
+    text-align: center;
+    font-size: 2.5vw;
+    line-height:4vw;
+    background-color: #FFAB00/* #ff0000*/;
+    color: #ffffff;
 }
 
 .container {
-    padding: 7px;
+    position: relative;
+    top: 2px;
+    padding: 12px;
     display: grid;
     grid-template:
-    "map line title" 50px
-    "map line info-box"auto 
-    "map line info-box"auto / 
-    25% 0.7% 74.3%;
+    "map line title" 4vw
+    "map line info-box" 16.1vw /
+    16.45vw 0.4vw auto;
 }
 
 .map {
@@ -30,42 +51,46 @@
 }
 
 .map img {
-    max-width: 100%;
-    height: auto;
+    width: 16.45vw;
+    height: 20.1vw;
     background-repeat: no-repeat;
 }
 
 #info-box {
     grid-area: info-box;
     background-color: #316DC1;
+    /* background-color:  #233062; */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5) inset, 0px 0px 5px rgba(200, 200, 200, 0.5);
 }
 
 .title {
-    line-height: 50px; /*고정값.*/
-    text-justify: auto;
     grid-area: title;
-    background: linear-gradient(to top, #AF5168 10px, #F36381);
+    /* background: linear-gradient(to top, #AF5168 10px, #F36381); */
+    font-size: 3.5vw;
     text-align: center;
+    background: linear-gradient(to top, #bb7d00 10px, #FFAB00);
+    -webkit-text-stroke: 0.12vw #524942;
     color: white;
-    -webkit-text-stroke: 1px #524942;
-    font-size: 40px;
 }
 
-.info {
-    grid-area: info;
-    padding: 5px;
+#info-box > .info {
+    /* padding: 0.5vw; */
+    position: relative;
+    top: 0.5vw;
+    text-align: center;
+    width: 100%;
     color: yellow;
-    text-shadow: 0 0 3px #524942;
-    font-size: 33px;
+    text-shadow: 0 0 0.4vw #524942;
+    font-size: 2.1vw;
     background-color: rgba(0, 0, 0, 0);
 }
 
-.areas {
-    grid-area: areas;
-    padding: 5px;
+#info-box > .areas {
+    padding: 1vw; /*0.5*/
+    width: 100%;
     color: white;
-    text-shadow: 0 0 3px #524942;
-    font-size: 45px;
+    text-shadow: 0 0 0.4vw #524942;
+    font-size: 2.6vw;
+    height: 10vw;
     background-color: rgba(0, 0, 0, 0);
 }

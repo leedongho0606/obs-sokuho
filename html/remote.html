@@ -4,11 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <style>
-        body {
-            font-family: "nanum";
-        }
-    </style>
     <title>OBS-SOKUHO-REMOTE</title>
 </head>
 
@@ -20,50 +15,47 @@
     <hr>
     <h2>Simulation</h2>
     <h2>PEWS Simulation</h2>
-    <input id="pewssim_it" type="text" placeholder="ID　TIME" value="2016000291 20160912113303"
+    <input id="pewssim_it" type="text" placeholder="ID　TIME" value="2016000291 20160912203303"
         style="width: 400px; font-size: 20pt;">
     <input type="button" value="START" style="font-size: 20pt;" onclick="pews_sim(true)">
     <input type="button" value="STOP" style="font-size: 20pt;" onclick="pews_sim()"><br>
-    <h2>JAPAN Earthquake Simulation</h2>
-    Comming Soon!
-    <hr>
+    <!-- <h2>JAPAN Earthquake Simulation</h2> -->
+    <!-- Comming Soon! -->
+    <!-- <hr> -->
     <h2>SELF Typing</h2>
     <p>* 송출되는것과 크기차이가 있습니다.</p>
     <div class="selftype">
-        <div class="base">
+        <div class="base" style="position:unset">
             <div class="container">
                 <div class="map">
                     <img id="map-img"></img>
                 </div>
-                <textarea class="title" placeholder="타이틀 입력" style="border: none"></textarea>
+                <textarea class="title" placeholder="제목 입력" style="border: none"></textarea>
                 <div id="info-box">
-                    <!-- 경북 경주시에서 지진발생 -->
                     <textarea class="info" rows="1" placeholder="지진정보 입력" style="border: none"></textarea>
-                    <br>
-                    <!-- 서울 부산 대구 인천 광주 대전 울산 세종 경기 강원 충북 충남 전북 전남 경북 경남 제주 -->
                     <textarea class="areas" rows="4" placeholder="영향지역 입력" style="border: none"></textarea>
                 </div>
             </div>
         </div>
     </div>
     <br>
-
-    <center><input type="button" value="BROADCAST" style="font-size: 20pt; background-color: red;" onclick="brc()">
+    <center>
+        <input type="button" value="BROADCAST" style="font-size: 20pt; background-color: red; color:white"
+            onclick="brc()">
+        <input type="button" value="HIDE" style="font-size: 20pt; background-color: blue; color:white"
+            onclick="hidesig()">
     </center>
-
     <hr>
     <h2>Preview - Live</h2>
-    <div class="preview">
-        <div class="base">
+    <div class="preview" style="display:none;">
+        <div class="base" style="position:unset;">
             <div class="container">
                 <div class="map">
                     <img id="map-img"></img>
                 </div>
                 <div class="title">긴급지진속보 (기상청)</div>
                 <div id="info-box">
-                    <!-- 경북 경주시에서 지진발생 -->
                     <div class="info"></div>
-                    <!-- 서울 부산 대구 인천 광주 대전 울산 세종 경기 강원 충북 충남 전북 전남 경북 경남 제주 -->
                     <div class="areas"></div>
                 </div>
             </div>
@@ -83,56 +75,49 @@
         webSocket = new WebSocket("ws://127.0.0.1:5950");
     webSocket.onopen = message => {
         console.log("Server connection: connect");
-        webSocket.send(JSON.stringify({ type: "get" }));
-    };
+        webSocket.send('{ "type": "get" }');
+    }
     webSocket.onclose = message => {
         console.log("Server connection: disconnect");
         alert("Server connection: disconnect");
         location.reload();
-    };
+    }
     webSocket.onerror = message => {
         console.log("Server connection: error");
         alert("Server connection: error");
         location.reload();
-    };
+    }
     webSocket.onmessage = msg => {
         msg = JSON.parse(msg.data);
-        prv.style = "display:" + msg.show;
+        console.log(msg);
+        prv.style.display = msg.show;
         map.src = msg.img;
         areas_text.textContent = msg.areas;
         info_text.textContent = msg.info;
         title.textContent = msg.title;
         switch (msg.sound) {
             case "play":
-                console.log("play");
                 if (audio.currentTime === 0) audio.play();
-                break;
-            case "pause":
-                console.log("pause");
-                audio.pause();
-                audio.currentTime = 0;
+                console.log("play");
                 break;
             default:
-                console.log("uk");
                 audio.pause();
                 audio.currentTime = 0;
+                console.log("pause", msg.sound);
                 break;
         }
-    };
+    }
     function brc() {
         if (!confirm("정말로 입력하신 내용으로 송출하시겠습니까?")) return;
-        console.log("a")
-        webSocket.send(JSON.stringify({
-            type: "set",
-            data: { show: "block", sound: "play", info: document.querySelector(".selftype .info").value, areas: document.querySelector(".selftype .areas").value, title: document.querySelector(".selftype .title").value, img: "" }
-        }));
+        webSocket.send(`{"type":"set","data":{"show":"block","sound":"play","info":"${document.querySelector(".selftype .info").value}","areas":"${document.querySelector(".selftype .areas").value}","title":"${document.querySelector(".selftype .title").value}","img":""}}`);
+    }
+    function hidesig() {
+        if (!confirm("정말로 송출중인 정보를 내리시겠습니까?")) return;
+        webSocket.send(`{"type":"set","data":{"show":"none","sound":"pause","info":"","title":"","img":""}}`);
     }
     function pews_sim(start) {
         let it;
         if (start) it = document.querySelector("#pewssim_it").value.split(" ");
-        webSocket.send(JSON.stringify({
-            type: "pewssim",
-            data: (start ? { id: it[0], time: it[1] } : {})
-        }));
+        webSocket.send(`{"type":"pewssim","data":${(start ? `{"id":"${it[0]}","time":${it[1]}}` : "{}")}}`);
     }
 </script>

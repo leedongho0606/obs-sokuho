@@ -1,12 +1,12 @@
 {
   "name": "obs-sokuho",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "author": "LDH0606",
   "license": "ISC",
   "dependencies": {
     "jimp": "^0.16.1",
-    "moment": "^2.29.1"
+    "ws": "^7.4.2"
   }
 }

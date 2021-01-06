@@ -1,11 +1,11 @@
 "use strict";
 const jimp = require("jimp"),
     mmicolor = ["#FFFFFF", "#FFFFFF", "#A0E6FF", "#92D050", "#FFFF00", "#FFC000", "#FF0000", "#A32777", "#632523", "#4C2600", "#000000", "#000000", "#DFDFDF", "#BFBFBF", "#9F9F9F"],
-    cp = require("child_process"),
     resource = {},
     zoom = 550,
     zoom_ban = (zoom / 2);
 function msgbox(type, title, msg) {
+    const cp = require("child_process");
     type = ["0x0", "0x10", "0x20", "0x30", "0x40"][type];
     /*
     중지0x10 
@@ -25,9 +25,8 @@ jimp.read("./res/loc.png", (err, img) => {
 });
 module.exports = {
     drawgrid: (data, cb) => {
-        let cnt = 0;
+        let lag = Date.now(), cnt = 0;
         const background = new jimp(resource.map.getWidth(), resource.map.getHeight(), "#FFFFFF"), map = new jimp(resource.map);
-        // 진도
         if (data.grid && data.grid.length > 0) {
             if (data.grid !== resource.grid) {
                 resource.grid = data.grid;
@@ -50,13 +49,12 @@ module.exports = {
                 py = fn_parseY(data.eol.lat) - lhh;
             background.blit(resource.loc, px, py, (err) => {
                 console.log("발생위치 그리기 " + (err ? "실패" : "성공"));
-                let cw = px - zoom_ban + lwh,
-                    ch = py - zoom_ban + lhh;
-                console.log(cw, ch);
+                let cw = Math.floor(px - zoom_ban + lwh),
+                    ch = Math.floor(py - zoom_ban + lhh);
                 cw = cw < resource.map.getWidth() && cw > 0 ? cw : resource.map.getWidth();
-                ch = ch < resource.map.getHeight() && ch > 0 ? ch : resource.map.getHeight();
+                ch = ch < resource.map.getHeight() && ch > 0 ? ch - 50 : resource.map.getHeight();
                 if (cw < resource.map.getWidth() && ch < resource.map.getHeight()) {
-                    background.crop(cw, ch, zoom, zoom, function (err) {
+                    background.crop(cw, ch, zoom, 670, function (err) {
                         console.log("이미지 확대 " + (err ? "실패" : "성공"));
                     });
                 }
@@ -66,6 +64,7 @@ module.exports = {
             console.log("지도 이미지 처리" + (err ? "실패" : "성공"));
             if (err) return cb();
             cb(val);
+            console.log("[IMG] LAG:", Date.now() - lag, "ms");
         });
     }
 }
@@ -76,5 +75,5 @@ function fn_parseX(loc) {
     return (Number(loc) - 124.5) * 113;
 }
 function mmitocolor(mmi) {
-    return mmicolor.length > mmi ? mmicolor[mmi] : mmicolor[1]; // mmicolor 배열 크기넘으면 강제로 진도1값으로
+    return mmicolor.length > mmi ? mmicolor[mmi] : mmicolor[1];
 }
